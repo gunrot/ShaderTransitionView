@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>private/ShaderEffectBurnOut.qml</file>
+        <file>private/ShaderEffectCircleOpen.qml</file>
+        <file>private/ShaderEffectCrossHatch.qml</file>
+        <file>private/ShaderEffectCrossZoom.qml</file>
+        <file>private/ShaderEffectCube.qml</file>
+        <file>private/ShaderEffectDirectionalWipe.qml</file>
+        <file>private/ShaderEffectDoorway.qml</file>
+        <file>private/ShaderEffectFadeColor.qml</file>
+        <file>private/ShaderEffectFlip.qml</file>
+        <file>private/ShaderEffectFold.qml</file>
+        <file>private/ShaderEffectGlitchDisplace.qml</file>
+        <file>private/ShaderEffectHorizontalSlide.qml</file>
+        <file>private/ShaderEffectLinearBlur.qml</file>
+        <file>private/ShaderEffectMorph.qml</file>
+        <file>private/ShaderEffectPageCurl.qml</file>
+        <file>private/ShaderEffectPinWheel.qml</file>
+        <file>private/ShaderEffectPixelize.qml</file>
+        <file>private/ShaderEffectPolkaDots.qml</file>
+        <file>private/ShaderEffectRadialWipe.qml</file>
+        <file>private/ShaderEffectSqueeze.qml</file>
+        <file>private/ShaderEffectSwap.qml</file>
+        <file>private/ShaderEffectSwirl.qml</file>
+        <file>private/ShaderEffectVerticalSlide.qml</file>
+        <file>private/ShaderEffectVerticalWind.qml</file>
+        <file>private/ShaderEffectWind.qml</file>
+        <file>STVideoView.qml</file>
+        <file>STView.qml</file>
+        <file>private/ShaderEffectDoomScreen.qml</file>
+        <file>private/ShaderEffectKaleidoscope.qml</file>
+    </qresource>
+</RCC>

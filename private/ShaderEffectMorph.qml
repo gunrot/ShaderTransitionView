@@ -10,14 +10,12 @@ ShaderEffect {
 
     property real progress: 0.0
     property real strength: 0.1
-    property bool forward: true
 
     fragmentShader: "
 uniform sampler2D srcSampler;
 uniform sampler2D dstSampler;
 uniform float progress;
 
-uniform bool forward;
 uniform float strength;
 
 varying highp vec2 qt_TexCoord0;

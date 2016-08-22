@@ -15,33 +15,9 @@ HEADERS += \
     shadertransitionview_plugin.h \
     shadertransitionview.h
 
-PLUGIN_PRIVATE = private/ShaderEffectCircleOpen.qml \
-    private/ShaderEffectDirectionalWipe.qml \
-    private/ShaderEffectDoorway.qml \
-    private/ShaderEffectFadeColor.qml \
-    private/ShaderEffectFlip.qml \
-    private/ShaderEffectFold.qml \
-    private/ShaderEffectMorph.qml \
-    private/ShaderEffectPinWheel.qml \
-    private/ShaderEffectPixelize.qml \
-    private/ShaderEffectRadialWipe.qml \
-    private/ShaderEffectWind.qml \
-    private/ShaderEffectPolkaDots.qml \
-    private/ShaderEffectSqueeze.qml \
-    private/ShaderEffectHorizontalSlide.qml \
-    private/ShaderEffectVerticalSlide.qml \
-    private/ShaderEffectCrossZoom.qml \
-    private/ShaderEffectSwirl.qml \
-    private/ShaderEffectVerticalWind.qml \
-    private/ShaderEffectLinearBlur.qml \
-    private/ShaderEffectSwap.qml \
-    private/ShaderEffectCrossHatch.qml
 
-DISTFILES = qmldir \
-    STView.qml \
-    $$PLUGIN_PRIVATE \
-    README.md \
-    STVideoView.qml
+
+DISTFILES = README.md qmldir
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
@@ -51,8 +27,7 @@ DISTFILES = qmldir \
     PRE_TARGETDEPS += $$copy_qmldir.target
 }
 
-qmldir.files = qmldir STView.qml STVideoView.qml
-qmldir_private.files = $$PLUGIN_PRIVATE
+qmldir.files = qmldir
 
 unix {
     installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
@@ -61,4 +36,7 @@ unix {
     qmldir_private.path = $$installPath/private
     INSTALLS += target qmldir qmldir_private
 }
+
+RESOURCES += \
+    qml.qrc
 

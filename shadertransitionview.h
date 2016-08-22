@@ -11,60 +11,16 @@ class ShaderTransitionView : public QQuickItem
     Q_OBJECT
     Q_DISABLE_COPY(ShaderTransitionView)
 
-    Q_PROPERTY(ShaderEffect transition READ transition WRITE setTransition NOTIFY transitionChanged)
+    Q_PROPERTY(QString transition READ transition WRITE setTransition NOTIFY transitionChanged)
 
-    Q_ENUMS(ShaderEffect)
+
 
 public:
     ShaderTransitionView(QQuickItem *parent = 0);
     ~ShaderTransitionView();
 
-    enum ShaderEffect {
-        EffectWIND,
-        ST_Wind,
-        EffectVERTICALWIND,
-        ST_VerticalWind,
-        EffectPINWHEEL,
-        ST_PinWheel,
-        EffectCIRCLEOPEN,
-        ST_CircleOpen,
-        EffectDIRECTIONALWIPE,
-        ST_DirectionalWipe,
-        EffectRADIALWIPE,
-        ST_RadialWipe,
-        EffectPIXELIZE,
-        ST_Pixelize,
-        EffectFLIP,
-        ST_Flip,
-        EffectFOLD,
-        ST_Fold,
-        EffectDOORWAY,
-        ST_Doorway,
-        EffectFADECOLOR,
-        ST_FadeColor,
-        EffectMORPH,
-        ST_Morph,
-        EffectPOLKADOTS,
-        ST_PolkaDots,
-        EffectSQUEEZE,
-        ST_Squeeze,
-        EffectHORIZONTALSLIDE,
-        ST_HorizontalSlide,
-        EffectVERTICALSLIDE,
-        ST_VerticalSlide,
-        EffectCROSSZOOM,
-        ST_CrossZoom,
-        EffectSWIRL,
-        ST_Swirl,
-        EffectLINEARBLUR,
-        ST_LinearBlur,
-        EffectSWAP,
-        ST_Swap,
-        EffectCROSSHATCH,
-        ST_CrossHatch
 
-    };
-    ShaderEffect transition() const { return m_transition; }
+    QString transition() const { return m_transition; }
 
     Q_INVOKABLE void pushQQuickItem( QQmlComponent* item ) { m_insideStack.push(item); }
     Q_INVOKABLE QQmlComponent* popQQuickItem() {
@@ -92,7 +48,7 @@ public:
     }
 
 public slots:
-    void setTransition(ShaderEffect transition)
+    void setTransition(QString transition)
     {
         if (m_transition == transition)
             return;
@@ -102,10 +58,10 @@ public slots:
     }
 
 signals:
-    void transitionChanged(ShaderEffect transition);
+    void transitionChanged(QString transition);
 
 private:
-    ShaderEffect m_transition;
+    QString m_transition;
 
     QStack<QQmlComponent*> m_insideStack;
 };

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import "private"
 
 import ShaderTransitionView 1.0
@@ -6,12 +6,12 @@ import ShaderTransitionView 1.0
 ShaderTransitionView {
     id: root
 
-    property int duration: 1000
+    property int duration: 1500
     property var itemList: []
     property int depth: 0
     property string currentItem: ""
     property var transitionOptions: { "progress":0.0 }
-    transition: ShaderTransitionView.EffectWIND
+    transition: "Wind"
 
     signal animationStarted();
     signal animationCompleted();
@@ -163,51 +163,7 @@ ShaderTransitionView {
 
     function __graphEffect()
     {
-        var retFile = "private/ShaderEffectWind.qml"
-        if( transition == ShaderTransitionView.EffectWIND ) {
-            retFile = "private/ShaderEffectWind.qml"
-        } else if (  transition == ShaderTransitionView.EffectVERTICALWIND ) {
-            retFile = "private/ShaderEffectVerticalWind.qml"
-        } else if (  transition == ShaderTransitionView.EffectPINWHEEL ) {
-            retFile = "private/ShaderEffectPinWheel.qml"
-        } else if (  transition == ShaderTransitionView.EffectCIRCLEOPEN ) {
-            retFile = "private/ShaderEffectCircleOpen.qml"
-        } else if (  transition == ShaderTransitionView.EffectDIRECTIONALWIPE ) {
-            retFile = "private/ShaderEffectDirectionalWipe.qml"
-        } else if (  transition == ShaderTransitionView.EffectRADIALWIPE ) {
-            retFile = "private/ShaderEffectRadialWipe.qml"
-        } else if (  transition == ShaderTransitionView.EffectPIXELIZE ) {
-            retFile = "private/ShaderEffectPixelize.qml"
-        } else if (  transition == ShaderTransitionView.EffectFLIP ) {
-            retFile = "private/ShaderEffectFlip.qml"
-        } else if (  transition == ShaderTransitionView.EffectFOLD ) {
-            retFile = "private/ShaderEffectFold.qml"
-        } else if (  transition == ShaderTransitionView.EffectDOORWAY ) {
-            retFile = "private/ShaderEffectDoorway.qml"
-        } else if (  transition == ShaderTransitionView.EffectFADECOLOR ) {
-            retFile = "private/ShaderEffectFadeColor.qml"
-        } else if (  transition == ShaderTransitionView.EffectMORPH ) {
-            retFile = "private/ShaderEffectMorph.qml"
-        } else if (  transition == ShaderTransitionView.EffectPOLKADOTS ) {
-            retFile = "private/ShaderEffectPolkaDots.qml"
-        } else if (  transition == ShaderTransitionView.EffectSQUEEZE ) {
-            retFile = "private/ShaderEffectSqueeze.qml"
-        } else if (  transition == ShaderTransitionView.EffectHORIZONTALSLIDE ) {
-            retFile = "private/ShaderEffectHorizontalSlide.qml"
-        } else if (  transition == ShaderTransitionView.EffectVERTICALSLIDE ) {
-            retFile = "private/ShaderEffectVerticalSlide.qml"
-        } else if (  transition == ShaderTransitionView.EffectCROSSZOOM ) {
-            retFile = "private/ShaderEffectCrossZoom.qml"
-        } else if (  transition == ShaderTransitionView.EffectSWIRL ) {
-            retFile = "private/ShaderEffectSwirl.qml"
-        } else if (  transition == ShaderTransitionView.EffectLINEARBLUR ) {
-            retFile = "private/ShaderEffectLinearBlur.qml"
-        } else if (  transition == ShaderTransitionView.EffectSWAP ) {
-            retFile = "private/ShaderEffectSwap.qml"
-        } else if (  transition == ShaderTransitionView.EffectCROSSHATCH ) {
-            retFile = "private/ShaderEffectCrossHatch.qml"
-        }
-        return retFile
+        return "private/ShaderEffect" + transition + ".qml";
     }
 
 
