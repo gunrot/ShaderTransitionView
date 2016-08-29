@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>private/ShaderEffectBurnOut.qml</file>
-        <file>private/ShaderEffectCircleOpen.qml</file>
         <file>private/ShaderEffectCrossHatch.qml</file>
         <file>private/ShaderEffectCrossZoom.qml</file>
         <file>private/ShaderEffectCube.qml</file>
+        <file>private/ShaderEffectDefocusBlur.qml</file>
         <file>private/ShaderEffectDirectionalWipe.qml</file>
         <file>private/ShaderEffectDoorway.qml</file>
         <file>private/ShaderEffectFadeColor.qml</file>
@@ -29,5 +29,10 @@
         <file>STView.qml</file>
         <file>private/ShaderEffectDoomScreen.qml</file>
         <file>private/ShaderEffectKaleidoscope.qml</file>
+        <file>private/ShaderEffectFlyeye.qml</file>
+        <file>private/ShaderEffectRandomSquares.qml</file>
+        <file>private/ShaderEffectReveal.qml</file>
+        <file>private/ShaderEffectCircleCrop.qml</file>
+        <file>private/ShaderEffectCircleOpen.qml</file>
     </qresource>
 </RCC>
