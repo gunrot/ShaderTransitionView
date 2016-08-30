@@ -27,7 +27,7 @@ uniform float colorSeparation;
 void main() {
 
   float inv = 1. - progress;
-  vec2 disp = size*vec2(cos(zoom*p.x), sin(zoom*p.y));
+  vec2 disp = size*vec2(cos(zoom*qt_TexCoord0.x), sin(zoom*qt_TexCoord0.y));
   vec4 texTo = texture2D(dstSampler, qt_TexCoord0 + inv*disp);
   vec4 texFrom = vec4(
     texture2D(srcSampler, qt_TexCoord0 + progress*disp*(1.0 - colorSeparation)).r,
