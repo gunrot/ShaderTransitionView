@@ -34,5 +34,9 @@
         <file>private/ShaderEffectReveal.qml</file>
         <file>private/ShaderEffectCircleCrop.qml</file>
         <file>private/ShaderEffectCircleOpen.qml</file>
+        <file>private/ShaderEffectStereoViewer.qml</file>
+        <file>private/ShaderEffectPuzzleRight.qml</file>
+        <file>private/ShaderEffectWarpFade.qml</file>
+        <file>private/ShaderEffectAtmosphericSlideshow.qml</file>
     </qresource>
 </RCC>
