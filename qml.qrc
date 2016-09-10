@@ -38,5 +38,9 @@
         <file>private/ShaderEffectPuzzleRight.qml</file>
         <file>private/ShaderEffectWarpFade.qml</file>
         <file>private/ShaderEffectAtmosphericSlideshow.qml</file>
+        <file>private/ShaderEffectColourDistance.qml</file>
+        <file>private/ShaderEffectBounce.qml</file>
+        <file>private/ShaderEffectMosaic.qml</file>
+        <file>private/ShaderEffectCrazyParametricFun.qml</file>
     </qresource>
 </RCC>
