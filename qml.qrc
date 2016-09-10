@@ -42,5 +42,15 @@
         <file>private/ShaderEffectBounce.qml</file>
         <file>private/ShaderEffectMosaic.qml</file>
         <file>private/ShaderEffectCrazyParametricFun.qml</file>
+        <file>private/ShaderEffectSimpleLuma.qml</file>
+        <file>private/luma/bilinear-lateral.png</file>
+        <file>private/luma/conical-asym.png</file>
+        <file>private/luma/conical-sym.png</file>
+        <file>private/luma/linear-sawtooth-lateral-4.png</file>
+        <file>private/luma/radial-tri-lateral-4.png</file>
+        <file>private/luma/spiral-1.png</file>
+        <file>private/luma/spiral-2.png</file>
+        <file>private/luma/spiral-3.png</file>
+        <file>private/luma/square.png</file>
     </qresource>
 </RCC>
