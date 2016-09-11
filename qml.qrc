@@ -52,5 +52,8 @@
         <file>private/luma/spiral-2.png</file>
         <file>private/luma/spiral-3.png</file>
         <file>private/luma/square.png</file>
+        <file>private/luma/zerreisen.gif</file>
+        <file>private/ShaderEffectLumaAnim.qml</file>
+        <file>private/ShaderEffectRipple.qml</file>
     </qresource>
 </RCC>

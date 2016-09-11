@@ -6,7 +6,7 @@ import ShaderTransitionView 1.0
 ShaderTransitionView {
     id: root
 
-    property int duration: 1500
+    property int duration: 700
     property var itemList: []
     property int depth: 0
     property string currentItem: ""
