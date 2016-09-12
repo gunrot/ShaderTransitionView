@@ -25,7 +25,7 @@ ShaderEffect {
 
     fragmentShader: "
 #ifdef GL_ES
-precision medium float;
+precision mediump float;
 #endif
 // General parameters
 uniform sampler2D srcSampler;

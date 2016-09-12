@@ -13,7 +13,7 @@ ShaderEffect {
 
     fragmentShader: "
 #ifdef GL_ES
-precision medium float;
+precision mediump float;
 #endif
 // General parameters
 uniform sampler2D srcSampler;
@@ -21,7 +21,7 @@ uniform sampler2D dstSampler;
 uniform float progress;
 varying highp vec2 qt_TexCoord0;
 
-/+ code taken from the LibreOffice project and modified o work in qml ShaderEffect
+/* code taken from the LibreOffice project and modified o work in qml ShaderEffect */
 /*
  * This file is part of the LibreOffice project.
  *
