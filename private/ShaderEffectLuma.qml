@@ -11,9 +11,16 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
-
+    property variant luma: img
+    Image {
+        anchors.fill: parent
+        id: img
+        fillMode: Image.Stretch
+        source: "luma/square.png"
+        visible:false
+        layer.enabled: true
+    }
+        
 fragmentShader: "
 #ifdef GL_ES
     precision highp float;
@@ -32,20 +39,13 @@ fragmentShader: "
 // Author: gre
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
+uniform sampler2D luma;
 
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
-vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
+vec4 transition(vec2 uv) {
   return mix(
-    getFromColor(uv),
     getToColor(uv),
-    m
+    getFromColor(uv),
+    step(progress, texture2D(luma, uv).r)
   );
 }
 

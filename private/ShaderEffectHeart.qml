@@ -11,8 +11,6 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
 
 fragmentShader: "
 #ifdef GL_ES
@@ -32,20 +30,17 @@ fragmentShader: "
 // Author: gre
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
-
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+float inHeart (vec2 p, vec2 center, float size) {
+  if (size==0.0) return 0.0;
+  vec2 o = (p-center)/(1.6*size);
+  float a = o.x*o.x+o.y*o.y-0.3;
+  return step(a*a*a, o.x*o.x*o.y*o.y*o.y);
 }
-
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
   return mix(
     getFromColor(uv),
     getToColor(uv),
-    m
+    inHeart(uv, vec2(0.5, 0.4), progress)
   );
 }
 

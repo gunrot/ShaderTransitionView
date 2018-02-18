@@ -1,8 +1,7 @@
+
 import QtQuick 2.0
 
-/* Source code from: http://transitions.glsl.io/
- * http://transitions.glsl.io/transition/b86b90161503a0023231 by rectalogic
- */
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
@@ -10,22 +9,37 @@ ShaderEffect {
     property variant srcSampler: textureSource
     property variant dstSampler: textureDestination
 
-    property bool forward: true
-    property real strength: 0.3
-
     property real progress: 0.0
+    property real ratio: width/height
+    property real strength: 0.4
 
-    fragmentShader: "
-uniform sampler2D srcSampler;
-uniform sampler2D dstSampler;
-uniform float progress;
+
+fragmentShader: "
+#ifdef GL_ES
+    precision highp float;
+#endif
+    varying vec2 qt_TexCoord0;
+    uniform float progress;
+    uniform float ratio;
+    uniform sampler2D srcSampler;
+    uniform sampler2D dstSampler;
+    vec4 getFromColor (vec2 uv) {
+        return texture2D(srcSampler, uv);
+    }
+    vec4 getToColor (vec2 uv) {
+        return texture2D(dstSampler, uv);
+    }
+// License: MIT
+// Author: rectalogic
+// ported by gre from https://gist.github.com/rectalogic/b86b90161503a0023231
+
+// Converted from https://github.com/rectalogic/rendermix-basic-effects/blob/master/assets/com/rendermix/CrossZoom/CrossZoom.frag
+// Which is based on https://github.com/evanw/glfx.js/blob/master/src/filters/blur/zoomblur.js
+// With additional easing functions from https://github.com/rectalogic/rendermix-basic-effects/blob/master/assets/com/rendermix/Easing/Easing.glsllib
+
+uniform float strength; // = 0.4
 
 const float PI = 3.141592653589793;
-
-uniform float strength;
-uniform bool forward;
-
-varying highp vec2 qt_TexCoord0;
 
 float Linear_ease(in float begin, in float change, in float duration, in float time) {
     return change * time / duration + begin;
@@ -46,46 +60,43 @@ float Sinusoidal_easeInOut(in float begin, in float change, in float duration, i
     return -change / 2.0 * (cos(PI * time / duration) - 1.0) + begin;
 }
 
-/* random number between 0 and 1 */
-float random(in vec3 scale, in float seed) {
-    /* use the fragment position for randomness */
-    return fract(sin(dot(gl_FragCoord.xyz + seed, scale)) * 43758.5453 + seed);
+float rand (vec2 co) {
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
 vec3 crossFade(in vec2 uv, in float dissolve) {
-    if( forward ) {
-        return mix(texture2D(srcSampler, uv).rgb, texture2D(dstSampler, uv).rgb, dissolve);
-    } else {
-        return mix(texture2D(dstSampler, uv).rgb, texture2D(srcSampler, uv).rgb, dissolve);
-    }
+    return mix(getFromColor(uv).rgb, getToColor(uv).rgb, dissolve);
 }
 
-void main() {
-    float pr = forward ? progress : (1.0-progress);
+vec4 transition(vec2 uv) {
+    vec2 texCoord = uv.xy / vec2(1.0).xy;
 
     // Linear interpolate center across center half of the image
-    vec2 center = vec2(Linear_ease(0.25, 0.5, 1.0, pr), 0.5);
-    float dissolve = Exponential_easeInOut(0.0, 1.0, 1.0, pr);
+    vec2 center = vec2(Linear_ease(0.25, 0.5, 1.0, progress), 0.5);
+    float dissolve = Exponential_easeInOut(0.0, 1.0, 1.0, progress);
 
     // Mirrored sinusoidal loop. 0->strength then strength->0
-    float strength = Sinusoidal_easeInOut(0.0, strength, 0.5, pr);
+    float strength = Sinusoidal_easeInOut(0.0, strength, 0.5, progress);
 
     vec3 color = vec3(0.0);
     float total = 0.0;
-    vec2 toCenter = center - qt_TexCoord0;
+    vec2 toCenter = center - texCoord;
 
     /* randomize the lookup values to hide the fixed number of samples */
-    float offset = random(vec3(12.9898, 78.233, 151.7182), 0.0);
+    float offset = rand(uv);
 
     for (float t = 0.0; t <= 40.0; t++) {
         float percent = (t + offset) / 40.0;
         float weight = 4.0 * (percent - percent * percent);
-        color += crossFade(qt_TexCoord0 + toCenter * percent * strength, dissolve) * weight;
+        color += crossFade(texCoord + toCenter * percent * strength, dissolve) * weight;
         total += weight;
     }
-    gl_FragColor = vec4(color / total, 1.0);
+    return vec4(color / total, 1.0);
 }
+
+    void main () {
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+    }
 "
-
 }
-

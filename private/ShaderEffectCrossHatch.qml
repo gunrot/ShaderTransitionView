@@ -1,8 +1,7 @@
+
 import QtQuick 2.0
 
-/* Source code from: http://transitions.glsl.io/
- * http://transitions.glsl.io/transition/04fd9a7de4012cbb03f6 by pthrasher
- */
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
@@ -10,35 +9,49 @@ ShaderEffect {
     property variant srcSampler: textureSource
     property variant dstSampler: textureDestination
 
-    property bool forward: true
-
     property real progress: 0.0
+    property real ratio: width/height
+    property vector2d center: Qt.vector2d(0.5,0.5)
+    property real threshold: 3.0
 
-    fragmentShader: "
-uniform sampler2D srcSampler;
-uniform sampler2D dstSampler;
-uniform float progress;
+    property real fadeEdge: 0.1
 
-uniform bool forward;
 
-const vec2 center = vec2(0.5, 0.5);
+fragmentShader: "
+#ifdef GL_ES
+    precision highp float;
+#endif
+    varying vec2 qt_TexCoord0;
+    uniform float progress;
+    uniform float ratio;
+    uniform sampler2D srcSampler;
+    uniform sampler2D dstSampler;
+    vec4 getFromColor (vec2 uv) {
+        return texture2D(srcSampler, uv);
+    }
+    vec4 getToColor (vec2 uv) {
+        return texture2D(dstSampler, uv);
+    }
+// License: MIT
+// Author: pthrasher
+// adapted by gre from https://gist.github.com/pthrasher/04fd9a7de4012cbb03f6
+
+uniform vec2 center; // = vec2(0.5)
+uniform float threshold; // = 3.0
+uniform float fadeEdge; // = 0.1
 
 float rand(vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(10.0,10.0))) * 10000.0);
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+vec4 transition(vec2 p) {
+  float dist = distance(center, p) / threshold;
+  float r = progress - min(rand(vec2(p.y, 0.0)), rand(vec2(0.0, p.x)));
+  return mix(getFromColor(p), getToColor(p), mix(0.0, mix(step(dist, r), 1.0, smoothstep(1.0-fadeEdge, 1.0, progress)), smoothstep(0.0, fadeEdge, progress)));    
 }
 
-varying highp vec2 qt_TexCoord0;
-
-void main() {
-    float x = forward ? progress : 1.0 - progress;
-    float dist = distance(center, qt_TexCoord0);
-    float r = x*1.7 - min(rand(vec2(qt_TexCoord0.y, 0.0)), rand(vec2(0.0, qt_TexCoord0.x)));
-    float m = step(dist, r);
-    vec4 v1 = forward ? texture2D(srcSampler, qt_TexCoord0) : texture2D(dstSampler, qt_TexCoord0);
-    vec4 v2 = forward ? texture2D(dstSampler, qt_TexCoord0) : texture2D(srcSampler, qt_TexCoord0);
-    gl_FragColor = mix(v1, v2, m);
-}
+    void main () {
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+    }
 "
-
 }
-

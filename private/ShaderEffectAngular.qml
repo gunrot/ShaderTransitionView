@@ -11,7 +11,7 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
+    property real startingAngle: 90;
 
 
 fragmentShader: "
@@ -29,24 +29,26 @@ fragmentShader: "
     vec4 getToColor (vec2 uv) {
         return texture2D(dstSampler, uv);
     }
-// Author: gre
+// Author: Fernando Kuteken
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
+#define PI 3.141592653589
 
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
+uniform float startingAngle; // = 90;
 
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
+  
+  float offset = startingAngle * PI / 180.0;
+  float angle = atan(uv.y - 0.5, uv.x - 0.5) + offset;
+  float normalizedAngle = (angle + PI) / (2.0 * PI);
+  
+  normalizedAngle = normalizedAngle - floor(normalizedAngle);
+
   return mix(
     getFromColor(uv),
     getToColor(uv),
-    m
-  );
+    step(normalizedAngle, progress)
+    );
 }
 
     void main () {

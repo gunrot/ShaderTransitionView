@@ -11,8 +11,8 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
+    property vector4d fromStep: Qt.vector4d(0.0, 0.2, 0.4, 0.0)
+    property vector4d toStep: Qt.vector4d(0.6, 0.8, 1.0, 1.0)
 
 fragmentShader: "
 #ifdef GL_ES
@@ -32,21 +32,16 @@ fragmentShader: "
 // Author: gre
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
+// Usage: fromStep and toStep must be in [0.0, 1.0] range 
+// and all(fromStep) must be < all(toStep)
 
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
+uniform vec4 fromStep; // = vec4(0.0, 0.2, 0.4, 0.0)
+uniform vec4 toStep; // = vec4(0.6, 0.8, 1.0, 1.0)
 
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
-  return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    m
-  );
+  vec4 a = getFromColor(uv);
+  vec4 b = getToColor(uv);
+  return mix(a, b, smoothstep(fromStep, toStep, vec4(progress)));
 }
 
     void main () {

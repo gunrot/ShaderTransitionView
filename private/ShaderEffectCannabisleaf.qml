@@ -11,8 +11,6 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
 
 fragmentShader: "
 #ifdef GL_ES
@@ -29,24 +27,20 @@ fragmentShader: "
     vec4 getToColor (vec2 uv) {
         return texture2D(dstSampler, uv);
     }
-// Author: gre
+// Author: @Flexi23
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
-
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
+// inspired by http://www.wolframalpha.com/input/?i=cannabis+curve
 
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
-  return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    m
-  );
+  if(progress == 0.0){
+    return getFromColor(uv);
+  }
+  vec2 leaf_uv = (uv - vec2(0.5))/10./pow(progress,3.5);
+	leaf_uv.y += 0.35;
+	float r = 0.18;
+	float o = atan(leaf_uv.y, leaf_uv.x);
+  return mix(getFromColor(uv), getToColor(uv), 1.-step(1. - length(leaf_uv)+r*(1.+sin(o))*(1.+0.9 * cos(8.*o))*(1.+0.1*cos(24.*o))*(0.9+0.05*cos(200.*o)), 1.));
 }
 
     void main () {
