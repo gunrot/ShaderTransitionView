@@ -11,8 +11,7 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
+    property vector3d color : Qt.vector3d(0.9, 0.4, 0.2)
 
 fragmentShader: "
 #ifdef GL_ES
@@ -29,23 +28,14 @@ fragmentShader: "
     vec4 getToColor (vec2 uv) {
         return texture2D(dstSampler, uv);
     }
-// Author: gre
+// author: gre
 // License: MIT
-
-// Custom parameters
-uniform float size; // = 0.2
-
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
+uniform vec3 color /* = vec3(0.9, 0.4, 0.2) */;
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
   return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    m
+    getFromColor(uv) + vec4(progress*color, 1.0),
+    getToColor(uv) + vec4((1.0-progress)*color, 1.0),
+    progress
   );
 }
 

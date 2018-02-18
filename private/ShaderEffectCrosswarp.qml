@@ -11,8 +11,6 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
-
 
 fragmentShader: "
 #ifdef GL_ES
@@ -29,24 +27,12 @@ fragmentShader: "
     vec4 getToColor (vec2 uv) {
         return texture2D(dstSampler, uv);
     }
-// Author: gre
+// Author: Eke Péter <peterekepeter@gmail.com>
 // License: MIT
-
-// Custom parameters
-uniform float size; // = 0.2
-
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
-vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
-  return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    m
-  );
+vec4 transition(vec2 p) {
+  float x = progress;
+  x=smoothstep(.0,1.0,(x*2.0+p.x-1.0));
+  return mix(getFromColor((p-.5)*(1.-x)+.5), getToColor((p-.5)*x+.5), x);
 }
 
     void main () {

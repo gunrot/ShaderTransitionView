@@ -11,7 +11,7 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.2
+    property real intensity: 0.3; // if 0.0, the image directly turn grayscale, if 0.9, the grayscale transition phase is very important
 
 
 fragmentShader: "
@@ -32,21 +32,19 @@ fragmentShader: "
 // Author: gre
 // License: MIT
 
-// Custom parameters
-uniform float size; // = 0.2
-
-float rand (vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+uniform float intensity; // = 0.3; // if 0.0, the image directly turn grayscale, if 0.9, the grayscale transition phase is very important
+ 
+vec3 grayscale (vec3 color) {
+  return vec3(0.2126*color.r + 0.7152*color.g + 0.0722*color.b);
 }
-
+ 
 vec4 transition (vec2 uv) {
-  float r = rand(vec2(0, uv.y));
-  float m = smoothstep(0.0, -size, uv.x*(1.0-size) + size*r - (progress * (1.0 + size)));
+  vec4 fc = getFromColor(uv);
+  vec4 tc = getToColor(uv);
   return mix(
-    getFromColor(uv),
-    getToColor(uv),
-    m
-  );
+    mix(vec4(grayscale(fc.rgb), 1.0), fc, smoothstep(1.0-intensity, 0.0, progress)),
+    mix(vec4(grayscale(tc.rgb), 1.0), tc, smoothstep(    intensity, 1.0, progress)),
+    progress);
 }
 
     void main () {

@@ -1,59 +1,57 @@
+
 import QtQuick 2.0
 
-/* Source code from: http://transitions.glsl.io/
- * http://transitions.glsl.io/transition/df8797fd112e8e429064 by gre
- */
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
 
     property variant srcSampler: textureSource
     property variant dstSampler: textureDestination
+
     property real progress: 0.0
+    property real ratio: width/height
+    property real colorSeparation: 0.04
 
-    property bool forward: true
 
-    fragmentShader: "
-uniform sampler2D srcSampler;
-uniform sampler2D dstSampler;
-uniform float progress;
-
-uniform bool forward;
-
-float progressY (float y) {
-  return 0.5 + (y-0.5) / ( forward ? (1.0-progress) : progress);
-}
-
-varying highp vec2 qt_TexCoord0;
-
-void main() {
-
-    float y = progressY(qt_TexCoord0.y);
-
-    if (y < 0.0 || y > 1.0) {
-        if( forward ) {
-            gl_FragColor = texture2D(dstSampler, qt_TexCoord0);
-        } else {
-            gl_FragColor = texture2D(srcSampler, qt_TexCoord0);
-        }
-    } else {
-        vec2 fp = vec2(qt_TexCoord0.x, y);
-        float r = 0.0;
-        float g = 0.0;
-        float b = 0.0;
-        if( forward ) {
-            r = texture2D(srcSampler, fp).r;
-            g = texture2D(srcSampler, fp).g;
-            b = texture2D(srcSampler, fp).b;
-        } else {
-            r = texture2D(dstSampler, fp).r;
-            g = texture2D(dstSampler, fp).g;
-            b = texture2D(dstSampler, fp).b;
-        }
-        gl_FragColor = vec4( r, g, b, 1.0 );
+fragmentShader: "
+#ifdef GL_ES
+    precision highp float;
+#endif
+    varying vec2 qt_TexCoord0;
+    uniform float progress;
+    uniform float ratio;
+    uniform sampler2D srcSampler;
+    uniform sampler2D dstSampler;
+    vec4 getFromColor (vec2 uv) {
+        return texture2D(srcSampler, uv);
     }
+    vec4 getToColor (vec2 uv) {
+        return texture2D(dstSampler, uv);
+    }
+// Author: gre
+// License: MIT
+ 
+uniform float colorSeparation; // = 0.04
+ 
+vec4 transition (vec2 uv) {
+  float y = 0.5 + (uv.y-0.5) / (1.0-progress);
+  if (y < 0.0 || y > 1.0) {
+     return getToColor(uv);
+  }
+  else {
+    vec2 fp = vec2(uv.x, y);
+    vec2 off = progress * vec2(0.0, colorSeparation);
+    vec4 c = getFromColor(fp);
+    vec4 cn = getFromColor(fp - off);
+    vec4 cp = getFromColor(fp + off);
+    return vec4(cn.r, c.g, cp.b, c.a);
+  }
 }
+
+    void main () {
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+    }
 "
-
 }
-

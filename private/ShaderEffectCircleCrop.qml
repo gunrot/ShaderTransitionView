@@ -1,8 +1,7 @@
+
 import QtQuick 2.0
 
-/* Source code from: http://transitions.glsl.io/
- * http://transitions.glsl.io/transition/35e8c18557995c77278e by gre
- */
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
@@ -10,39 +9,46 @@ ShaderEffect {
     property variant srcSampler: textureSource
     property variant dstSampler: textureDestination
 
-
     property real progress: 0.0
-    fragmentShader: "
-uniform sampler2D srcSampler;
-uniform sampler2D dstSampler;
-uniform float progress;
+    property real ratio: width/height
+    property vector4d bgcolor: Qt.vector4d(0.0, 0.0, 0.0, 1.0)
 
+fragmentShader: "
+#ifdef GL_ES
+    precision highp float;
+#endif
+    varying vec2 qt_TexCoord0;
+    uniform float progress;
+    uniform float ratio;
+    uniform sampler2D srcSampler;
+    uniform sampler2D dstSampler;
+    vec4 getFromColor (vec2 uv) {
+        return texture2D(srcSampler, uv);
+    }
+    vec4 getToColor (vec2 uv) {
+        return texture2D(dstSampler, uv);
+    }
+// License: MIT
+// Author: fkuteken
+// ported by gre from https://gist.github.com/fkuteken/f63e3009c1143950dee9063c3b83fb88
 
-varying highp vec2 qt_TexCoord0;
+uniform vec4 bgcolor; // = vec4(0.0, 0.0, 0.0, 1.0)
 
+vec2 ratio2 = vec2(1.0, 1.0 / ratio);
+float s = pow(2.0 * abs(progress - 0.5), 3.0);
 
-const float maxRadius = 2.0;
-
-void main() {
-
-  float distX = qt_TexCoord0.x - 0.5;
-  float distY = qt_TexCoord0.y - 0.5;
-  float dist = sqrt(distX * distX + distY * distY);
-
-  float step = 2.0 * abs(progress - 0.5);
-  step = step * step * step;
-
-  if (dist < step * maxRadius)
-  {
-    if (progress < 0.5)
-      gl_FragColor = texture2D(srcSampler, qt_TexCoord0);
-    else
-      gl_FragColor = texture2D(dstSampler, qt_TexCoord0);
-  }
-  else
-    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+vec4 transition(vec2 p) {
+  float dist = length((vec2(p) - 0.5) * ratio2);
+  return mix(
+    progress < 0.5 ? getFromColor(p) : getToColor(p), // branching is ok here as we statically depend on progress uniform (branching won't change over pixels)
+    bgcolor,
+    step(s, dist)
+  );
 }
+
+    void main () {
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+    }
 "
-
 }
-

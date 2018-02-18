@@ -1,8 +1,7 @@
+
 import QtQuick 2.0
 
-/* Source code from: http://transitions.glsl.io/
- * http://transitions.glsl.io/transition/b93818de23d4511fde10 by nwoeanhinnogaehr
- */
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
@@ -11,26 +10,44 @@ ShaderEffect {
     property variant dstSampler: textureDestination
 
     property real progress: 0.0
-    property real blocksize: 55.0
+    property real ratio: width/height
+    property vector2d squaresMin: Qt.vector2d(20,20)
+    property int steps : 50 
 
-    fragmentShader: "
-uniform sampler2D srcSampler;
-uniform sampler2D dstSampler;
-uniform float progress;
+fragmentShader: "
+#ifdef GL_ES
+    precision highp float;
+#endif
+    varying vec2 qt_TexCoord0;
+    uniform float progress;
+    uniform float ratio;
+    uniform sampler2D srcSampler;
+    uniform sampler2D dstSampler;
+    vec4 getFromColor (vec2 uv) {
+        return texture2D(srcSampler, uv);
+    }
+    vec4 getToColor (vec2 uv) {
+        return texture2D(dstSampler, uv);
+    }
+// Author: gre
+// License: MIT
+// forked from https://gist.github.com/benraziel/c528607361d90a072e98
 
-uniform float blocksize;
+uniform vec2 squaresMin/* = ivec2(20) */; // minimum number of squares (when the effect is at its higher level)
+uniform int steps /* = 50 */; // zero disable the stepping
 
-varying highp vec2 qt_TexCoord0;
+float d = min(progress, 1.0 - progress);
+float dist = steps>0 ? ceil(d * float(steps)) / float(steps) : d;
+vec2 squareSize = 2.0 * dist / vec2(squaresMin);
 
-float rand(vec2 co) {
-    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+vec4 transition(vec2 uv) {
+  vec2 p = dist>0.0 ? (floor(uv / squareSize) + 0.5) * squareSize : uv;
+  return mix(getFromColor(p), getToColor(p), progress);
 }
 
-void main() {
-    float p = step(rand(floor(gl_FragCoord.xy/blocksize)), progress);
-    gl_FragColor = mix(texture2D(srcSampler, qt_TexCoord0), texture2D(dstSampler, qt_TexCoord0), p);
-}
+    void main () {
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+    }
 "
-
 }
-

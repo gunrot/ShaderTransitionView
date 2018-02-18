@@ -11,9 +11,9 @@ ShaderEffect {
 
     property real progress: 0.0
     property real ratio: width/height
-    property real size: 0.04
+    property real amplitude: 1.0
 
-    property real zoom: 50.0
+    property real waves: 30.0
 
     property real colorSeparation: 0.3
 
@@ -33,21 +33,32 @@ fragmentShader: "
     vec4 getToColor (vec2 uv) {
         return texture2D(dstSampler, uv);
     }
-// Author: gre
+// Author: mandubian
 // License: MIT
-uniform float size; // = 0.04
-uniform float zoom; // = 50.0
+uniform float amplitude; // = 1.0
+uniform float waves; // = 30.0
 uniform float colorSeparation; // = 0.3
-
-vec4 transition(vec2 p) {
+float PI = 3.14159265358979323846264;
+float compute(vec2 p, float progress, vec2 center) {
+vec2 o = p*sin(progress * amplitude)-center;
+// horizontal vector
+vec2 h = vec2(1., 0.);
+// butterfly polar function (don't ask me why this one :))
+float theta = acos(dot(o, h)) * waves;
+return (exp(cos(theta)) - 2.*cos(4.*theta) + pow(sin((2.*theta - PI) / 24.), 5.)) / 10.;
+}
+vec4 transition(vec2 uv) {
+  vec2 p = uv.xy / vec2(1.0).xy;
   float inv = 1. - progress;
-  vec2 disp = size*vec2(cos(zoom*p.x), sin(zoom*p.y));
+  vec2 dir = p - vec2(.5);
+  float dist = length(dir);
+  float disp = compute(p, progress, vec2(0.5, 0.5)) ;
   vec4 texTo = getToColor(p + inv*disp);
   vec4 texFrom = vec4(
-    getFromColor(p + progress*disp*(1.0 - colorSeparation)).r,
-    getFromColor(p + progress*disp).g,
-    getFromColor(p + progress*disp*(1.0 + colorSeparation)).b,
-    1.0);
+  getFromColor(p + progress*disp*(1.0 - colorSeparation)).r,
+  getFromColor(p + progress*disp).g,
+  getFromColor(p + progress*disp*(1.0 + colorSeparation)).b,
+  1.0);
   return texTo*progress + texFrom*inv;
 }
 

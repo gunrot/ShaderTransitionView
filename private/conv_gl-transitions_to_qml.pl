@@ -34,7 +34,7 @@ my %glsl2qmlValues = (
           or die "Could not open file '$file' $!";
         my $outname = $file;
         $outname =~ s/(.)([^\.]*).*$/\U$1\E$2.qml/g;
-        $outname = $outdir."/".$outname;
+        $outname = $outdir."/ShaderEffect".$outname;
         open(my $out, '>:encoding(UTF-8)',$outname )
           or die "Could not open file '$outname' $!";
         print "Generating $outname\n";
@@ -63,7 +63,7 @@ ShaderEffect {
 my $text;
 while (<$in>) {
     $text.=$_;
-    if (m/uniform ([^\s]+) ([^;]+);\s*\/\/\s+=\s+(.*$)/)
+    if (m/uniform ([^\s]+) ([^;]+);{0,1}\s*\/[\/\*]\s*=\s*([^\*]+)[\/\*; ]*/)
     {
         if (!exists($glsl2qmlTypes{$1}))
         {
@@ -97,7 +97,11 @@ while (<$in>) {
             }
             else
             {
-                print $out "$val\n";
+               if ($type eq "bool")
+               {
+                $val = ($val eq "0") ? "false" : "true";
+               }
+               print $out "$val\n";
             }
         }
     }
@@ -135,12 +139,14 @@ fragmentShader: "
     }
 ];
 
+$text =~s/\"/\\"/g;
+$text =~s/uniform ivec/uniform vec/g;
 print $out $text;
 
 print $out q[
     void main () {
         float r = ratio;
-        gl_FragColor = transition(qt_TexCoord0);
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
     }
 "
 }

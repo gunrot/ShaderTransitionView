@@ -1,6 +1,7 @@
+
 import QtQuick 2.0
 
-//Source code from: http://transitions.glsl.io/
+//GLSL Source code from: https://github.com/gl-transitions/gl-transitions
 
 ShaderEffect {
     anchors.fill: parent
@@ -9,12 +10,13 @@ ShaderEffect {
     property variant dstSampler: textureDestination
 
     property real progress: 0.0
-    property real smoothness: 0.01
     property real ratio: width/height
-    property vector2d center:Qt.vector2d(0.5, 0.5)
-    property vector3d color: Qt.vector3d(0.0, 0.0, 0.0)
+    property real smoothness: 0.03
 
-    fragmentShader: "
+    property vector2d center: Qt.vector2d(0.5,0.5)
+    property vector3d color: Qt.vector3d(0.0,0.0,0.0)
+
+fragmentShader: "
 #ifdef GL_ES
     precision highp float;
 #endif
@@ -23,14 +25,12 @@ ShaderEffect {
     uniform float ratio;
     uniform sampler2D srcSampler;
     uniform sampler2D dstSampler;
-
     vec4 getFromColor (vec2 uv) {
-    return texture2D(srcSampler, uv);
+        return texture2D(srcSampler, uv);
     }
     vec4 getToColor (vec2 uv) {
-    return texture2D(dstSampler, uv);
+        return texture2D(dstSampler, uv);
     }
-// General parameters
 // License: MIT
 // Author: pthrasher
 // adapted by gre from https://gist.github.com/pthrasher/8e6226b215548ba12734
@@ -79,14 +79,9 @@ vec4 transition(vec2 p) {
   return mix(mix(cfrom, cto, m), mix(cfrom, vec4(color, 1.0), 0.75), step(m, -2.0));
 }
 
-
-///////////////////////
     void main () {
-    float r = ratio;
-    gl_FragColor = transition(qt_TexCoord0);
+        float r = ratio;
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
     }
-
 "
-
 }
-
