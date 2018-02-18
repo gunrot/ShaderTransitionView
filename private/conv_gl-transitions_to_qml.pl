@@ -132,10 +132,10 @@ fragmentShader: "
     uniform sampler2D srcSampler;
     uniform sampler2D dstSampler;
     vec4 getFromColor (vec2 uv) {
-        return texture2D(srcSampler, uv);
+        return texture2D(srcSampler, vec2(uv.x,1.0 - uv.y));
     }
     vec4 getToColor (vec2 uv) {
-        return texture2D(dstSampler, uv);
+        return texture2D(dstSampler, vec2(uv.x,1.0 - uv.y));
     }
 ];
 
@@ -145,8 +145,7 @@ print $out $text;
 
 print $out q[
     void main () {
-        float r = ratio;
-        gl_FragColor = transition(vec2(qt_TexCoord0.x,qt_TexCoord0.y));
+        gl_FragColor = transition(vec2(qt_TexCoord0.x,1. - qt_TexCoord0.y));
     }
 "
 }
