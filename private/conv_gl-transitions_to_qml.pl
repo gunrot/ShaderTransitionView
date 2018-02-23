@@ -27,14 +27,31 @@ my %glsl2qmlValues = (
     local $CWD = $ARGV[0];
 
     my @files = glob('*.glsl');
+    my $qrcname = $outdir."/gl-transitions.qrc";
+    my $jsname = $outdir."/gl-transitions.js";
+
+
+    open(my $qrc, '>:encoding(UTF-8)', $qrcname) or die "Could not open file '$qrcname' $!";
+    open(my $js, '>:encoding(UTF-8)', $jsname) or die "Could not open file '$jsname' $!";
+    print $js q"
+function getEffects() {
+    return [";
+    print $qrc q[
+<RCC>
+    <qresource prefix="/TransitionEffects">
+];
+    my $number = 0;
     foreach my $file (@files) {
         print "Reading $file\n";
-
         open(my $in, '<:encoding(UTF-8)', $file)
           or die "Could not open file '$file' $!";
         my $outname = $file;
-        $outname =~ s/(.)([^\.]*).*$/\U$1\E$2.qml/g;
-        $outname = $outdir."/ShaderEffect".$outname;
+        $outname =~ s/(.)([^\.]*).*$/\U$1\E$2/g;
+        print $qrc "        <file>$outname.qml</file>\n";
+        if ($number > 0) { print $js ",";} 
+        print $js "'$outname'";
+        
+        $outname = $outdir."/".$outname.".qml";
         open(my $out, '>:encoding(UTF-8)',$outname )
           or die "Could not open file '$outname' $!";
         print "Generating $outname\n";
@@ -42,7 +59,20 @@ my %glsl2qmlValues = (
 
         close($in);
         close($out);
+        $number++;
     }
+    print $qrc q[
+        <file>luma/square.png</file>
+        <file>gl-transitions.js</file>
+    </qresource>
+</RCC>
+];
+    close ($qrc);
+    print $js q"];
+}
+";
+    close ($js);
+    print "Generated $number transition qml files\n";
 }
 sub printTransitionEffect {
 my ($in, $out) = @_;
