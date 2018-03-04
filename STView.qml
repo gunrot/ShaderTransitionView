@@ -1,5 +1,5 @@
 import QtQuick 2.6
-import "private"
+import "TransitionEffects"
 
 import ShaderTransitionView 1.0
 
@@ -163,7 +163,7 @@ ShaderTransitionView {
 
     function __graphEffect()
     {
-        return "private/ShaderEffect" + transition + ".qml";
+        return "TransitionEffects/" + transition + ".qml";
     }
 
 

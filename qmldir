@@ -3,3 +3,5 @@ plugin ShaderTransitionView
 
 STView 1.0 qrc:///STView.qml
 STVideoView 1.0 qrc:///STVideoView.qml
+GlTransitions 1.0 qrc:///TransitionEffects/gl-transitions.js
+

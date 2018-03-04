@@ -29,14 +29,13 @@ DISTFILES = README.md qmldir
 
 qmldir.files = qmldir
 
-unix {
-    installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
-    qmldir.path = $$installPath
-    target.path = $$installPath
-    qmldir_private.path = $$installPath/private
-    INSTALLS += target qmldir qmldir_private
-}
+installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
+qmldir.path = $$installPath
+target.path = $$installPath
+qmldir_private.path = $$installPath/private
+INSTALLS += target qmldir qmldir_private
 
 RESOURCES += \
-    qml.qrc
+    qml.qrc \
+    private/gl-transitions.qrc
 

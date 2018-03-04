@@ -1,0 +1,4 @@
+
+function getEffects() {
+    return ['Angular','Bounce','Burn','ButterflyWaveScrawler','Cannabisleaf','Circle','CircleCrop','Circleopen','Colorphase','ColourDistance','CrazyParametricFun','Crosshatch','Crosswarp','CrossZoom','Cube','Directionalwarp','Directionalwipe','DoomScreenTransition','Doorway','Dreamy','DreamyZoom','Fade','Fadecolor','Fadegrayscale','Flyeye','GlitchDisplace','GlitchMemories','GridFlip','Heart','Hexagonalize','InvertedPageCurl','Kaleidoscope','LinearBlur','Luma','Luminance_melt','Morph','Mosaic','Multiply_blend','Perlin','Pinwheel','Pixelize','Polar_function','PolkaDotsCurtain','Radial','Randomsquares','Ripple','Rotate_scale_fade','Squareswire','Squeeze','StereoViewer','Swap','Swirl','UndulatingBurnOut','WaterDrop','Wind','Windowblinds','WipeDown','WipeLeft','WipeRight','WipeUp','ZoomInCircles'];
+}
