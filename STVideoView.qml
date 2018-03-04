@@ -12,7 +12,7 @@ ShaderTransitionView {
     property int depth: 0
     property string currentItem: ""
     property var shaderEffectOptions: { "progress":0.0 }
-    shaderEffect: ShaderTransitionView.EffectWIND
+    shaderEffect: "Wind"
 
     property variant videoOutput: videoOutputCurrent
     property variant mediaPlayer: playerCurrent
@@ -83,35 +83,7 @@ ShaderTransitionView {
 
     function __graphEffect()
     {
-        var retFile = "private/ShaderEffectWind.qml"
-        if( shaderEffect == ShaderTransitionView.EffectWIND ) {
-            retFile = "private/ShaderEffectWind.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectPINWHEEL ) {
-            retFile = "private/ShaderEffectPinWheel.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectCIRCLEOPEN ) {
-            retFile = "private/ShaderEffectCircleOpen.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectDIRECTIONALWIPE ) {
-            retFile = "private/ShaderEffectDirectionalWipe.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectRADIALWIPE ) {
-            retFile = "private/ShaderEffectRadialWipe.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectPIXELIZE ) {
-            retFile = "private/ShaderEffectPixelize.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectFLIP ) {
-            retFile = "private/ShaderEffectFlip.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectFOLD ) {
-            retFile = "private/ShaderEffectFold.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectDOORWAY ) {
-            retFile = "private/ShaderEffectDoorway.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectFADECOLOR ) {
-            retFile = "private/ShaderEffectFadeColor.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectMORPH ) {
-            retFile = "private/ShaderEffectMorph.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectPOLKADOTS ) {
-            retFile = "private/ShaderEffectPolkaDots.qml"
-        } else if (  shaderEffect == ShaderTransitionView.EffectSQUEEZE ) {
-            retFile = "private/ShaderEffectSqueeze.qml"
-        }
-        return retFile
+        return "TransitionEffects/" + transition + ".qml";
     }
 
 
