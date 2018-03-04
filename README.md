@@ -2,13 +2,13 @@
 
 This is a small QML plugin which provides an easy way to apply different transitions between two QML views in your Qt/QML application.
 
-To learn more about the project visit [wiki pages](https://github.com/anatolyk82/ShaderTransitionView/wiki).
+To learn more about the project visit [wiki pages](https://github.com/gunrot/ShaderTransitionView/wiki).
 
  This short video can show some of those transitions.
 [![ScreenShot](https://img-fotki.yandex.ru/get/68556/603575.21/0_d2fd4_2407de61_orig)](
 https://youtu.be/rS-fmlKRQ3s)
 
- There is a demo application which shows how *ShaderTransitionView* actually works. The app can be found [here](https://github.com/anatolyk82/ShaderTransitionViewDemo).
+ There is a demo application which shows how *ShaderTransitionView* actually works. The app can be found [here](https://github.com/gunrot/ShaderTransitionViewDemo).
 
 
 ### STView
@@ -23,7 +23,7 @@ Properties:
 * *int* **depth** - the property defines the number of items currently pushed onto the stack.
 * *string* **currentItem** - the property defines the current QML file. If the current view is a QML component it returns a string *ShaderTranstionView::component:N* where *N* is a number of a QML component in the stack.
 * *Array* **transitionOptions** - a javascript array to set options for the current transition.
-* *enum* **transition** - the property defines which shader effect will be applied for the next transition.
+* *string* **transition** - the property defines which shader effect will be applied for the next transition.
 * *real* **progress** - it shows the progress of animation. The value changes from 0.0 to 1.0.
 * *alias* **easing** - it specifies the easing curve used for the animation.
 
@@ -43,189 +43,9 @@ Signals:
 
 ### Transitions
 
-**ShaderTransitionView.EffectWIND**
+The transitions are taken from https://github.com/gl-transitions/gl-transitions. The perl script converts the glsl files into qml files, which can be directly used. A qrc including the generated files and a js file having a function returning an array of the transition names is also generated. No manual modification is needed. The demo uses the js function returning the array of names to show the transtions in a listview.
 
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **size** - the option defines the size of transition zone during the animation between two views. This variable can take a value from 0.0 to 1.0
-
-------------
-
-**ShaderTransitionView.EffectVERTICALWIND**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **size** - the option defines the size of transition zone during the animation between two views. This variable can take a value from 0.0 to 1.0
-
-------------
-
-**ShaderTransitionView.EffectCIRCLEOPEN**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **smoothness** - the option defines how smoothly one view goes into the other during the animation. This variable can take a value from 0.0 to 1.0
-
-------------
-
-**ShaderTransitionView.EffectPINWHEEL**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-------------
-
-**ShaderTransitionView.EffectDIRECTIONALWIPE**
-
-Options:
-* *real* **smoothness** - the option defines how smoothly one view goes into the other during the animation. This variable can take a value from 0.0 to 1.0
-* *vector2d* **direction** - it is a 2D vector which defines a direction the animation. The origin is located at the top left side of the screen. For instance, if the **direction** is equal *Qt*.vector2d(1.0, -1.0), the animation goes for the left bottom side to top right side.
-
-------------
-
-**ShaderTransitionView.EffectRADIALWIPE**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectRADIALWIPE)...
-
-------------
-
-
-**ShaderTransitionView.EffectPIXELIZE**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **blocksize** - the option defines the size of one block. They appear randomly all over the first view replacing it by the next view.
-
-------------
-
-**ShaderTransitionView.EffectFLIP**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-------------
-
-**ShaderTransitionView.EffectFOLD**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-------------
-
-**ShaderTransitionView.EffectDOORWAY**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied. The default value is *true*.
-* *real* **reflection** - the option defines how intensively the reflection is. The default value is *0.4*.
-* *real* **perspective** - the option defines how much the foreground view has a perspective effect when it's opening. The closer the value to zero the less the perspective effect is. The default value is *0.4*.
-* *real* **depth** - the option defines how deep one goes away back replacing by the next one. The default value is *2*.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectDOORWAY)...
-
-------------
-
-**ShaderTransitionView.EffectFADECOLOR**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *vector3d* **color** - the option defines which color overshadows one view replacing it by another. The option takes a 3D vector. Each component of the vector defines a color in RGB in range from 0.0 to 1.0. For instance *Qt*.vector3d( 1.0, 0.0, 0.0 ) defines a red color.
-* *real* **colorPhase** - it defines an intensity of an overshadowing color. It can take values from 0.0 to 1.0.
-
-------------
-
-**ShaderTransitionView.EffectMORPH**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **strength** - the option defines an intensity of this animation.
-
-------------
-
-**ShaderTransitionView.EffectPOLKADOTS**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **dots** - the option defines how many expanding dots appear on the first view replacing it by the second one.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectPOLKADOTS)...
-
-------------
-
-**ShaderTransitionView.EffectSQUEEZE**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectSQUEEZE)...
-
-------------
-
-**ShaderTransitionView.EffectHORIZONTALSLIDE**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-------------
-
-**ShaderTransitionView.EffectVERTICALSLIDE**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-
-------------
-
-**ShaderTransitionView.EffectCROSSZOOM**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied.
-* *real* **strength** - the option defines an intensity of this a zoom animation.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectCROSSZOOM)...
-
-------------
-
-**ShaderTransitionView.EffectSWIRL**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied. If it is *true* it twists clockwise.
-* *real* **rotation** - the option defines how many turnovers will be applied.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectSWIRL)...
-
-------------
-
-**ShaderTransitionView.EffectLINEARBLUR**
-
-Options:
-* *real* **intensity** - the option defines the intensity of blur effect.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectLINEARBLUR)...
-
-------------
-
-**ShaderTransitionView.EffectSWAP**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied. The default value is *true*.
-* *real* **reflection** - the option defines how intensively the reflection is. The default value is *0.4*.
-* *real* **perspective** - the option defines how far one view turns back replacing by the next one. The default value is *0.2*.
-* *real* **depth** - the option defines how deep one view moves back replacing by the next one. The default value is *3.0*.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectSWAP)...
-
-------------
-
-**ShaderTransitionView.EffectCROSSHATCH**
-
-Options:
-* *bool* **forward** - the option defines a direction of animation which will be applied. The default value is *true*.
-
-Read [more](https://github.com/anatolyk82/ShaderTransitionView/wiki/EffectCROSSHATCH)...
-
-------------
-
+THere are now over 60 transtions available. Most of them have additional parameters, which  you can pass as na array in the  transitionOptions parameter. Look up the option property names in the transiton qml file.
 
 ### How to use it
 
@@ -246,7 +66,7 @@ Window {
         id: view
         anchors.fill: parent
         duration: 700
-        transition: ShaderTransitionView.EffectFADECOLOR
+        transition: "Wind"
         transitionOptions: { "color": Qt.vector3d(0.0, 0.0, 0.0) }
     }
 
@@ -298,7 +118,7 @@ Window {
         id: stView
         anchors.fill: parent
         duration: 700
-        transition: ShaderTransitionView.EffectWIND
+        transition: "Wind"
         transitionOptions: { "size": 0.3 }
     }
 
