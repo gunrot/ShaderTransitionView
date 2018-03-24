@@ -12,7 +12,7 @@ ShaderTransitionView {
     property int depth: 0
     property string currentItem: ""
     property var shaderEffectOptions: { "progress":0.0 }
-    shaderEffect: "Wind"
+    transition: "Wind"
 
     property variant videoOutput: videoOutputCurrent
     property variant mediaPlayer: playerCurrent
